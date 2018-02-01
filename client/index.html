@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="js/jquery-3.2.0.js"></script>
+    <title></title>
+</head>
+
+<body>
+
+    <div id="myHeader">
+        <h1>欢迎使用达内的简易博客系统</h1>
+        <p id="p_login">
+            <a href="http://localhost/mongoProject/client/login.html" id="login">登录</a>
+            <a href="register.html" id="register">注册</a>
+        </p>
+        <p id="p_welcome">
+            Welcome
+            <b id="uname">张三</b>
+            <a href="#" id="logout">退出</a>
+        </p>
+    </div>
+
+    <div id="section">
+
+    </div>
+
+    <script>
+        $('#section').load('listArticles.html', function () {
+            $('#add').click(() => {
+                location = "addArticle.html"
+            })
+        });
+        //当页面加载进来之后 向服务器端请求isLogin.php
+        $.get("http://localhost/mongoProject/server/routes/isLogin.php")
+            .then((result) => {
+                console.log(result);
+                //如果ok是1，认为用户已登录
+                if (result.ok == 1) {
+                    $('#p_login').hide();
+                    $('#uname').text(result.uname);
+                }
+                else {
+                    $('#p_welcome').hide();
+                }
+            })
+
+        function showArticles() {
+            $.get("http://localhost/mongoProject/server/routes/listArticles.php")
+                .then((result) => {
+                    console.log(result);
+                    if (result) {
+
+                        var List = $('#articleList')
+                        for (var i = 0; i < result.length; i++) {
+                            var content = `
+                    <a href=${"viewArticle.html?id=" + result[i]._id.$id}>
+                        <h3>${result[i].title}</h3>
+                     </a>
+                     <p>${result[i].content}</p>
+                    `
+                            var item = $('<li></li>').html(content)
+                            List.append(item);
+                        }
+                    }
+                })
+        }
+        showArticles();
+
+
+
+
+        $('#logout').click(() => {
+            //请求退出
+            $.get("http://localhost/mongoProject/server/routes/logout.php")
+                .then((result) => {
+                    if (result.ok == 1) {
+                        $('#p_login').show();
+                        $('#p_welcome').hide();
+                    }
+                })
+        })
+
+    </script>
+
+</body>
+
+</html>
