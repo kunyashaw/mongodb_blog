@@ -1,55 +1,77 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
     <meta charset="UTF-8">
     <script src="js/jquery-3.2.0.js"></script>
     <title></title>
 </head>
+
 <body>
 
-<form id="myRegister">
-    用户名:<input type="text" name="uname"/>
-    <br/>
-    密码1:<input type="password" name="upwd" />
-    <br/>
-    <button>注册</button>
-</form>
+    <form id="myRegister">
+        用户名:
+        <input type="text" name="uname" />
+        <br/> 密码:
+        <input type="password" name="upwd" />
+        <br/>
+        <button id="btnRegister">注册</button>
+    </form>
+    <button id="btnLogin">去登录</button>
 
-<script>
-    $('#myRegister').submit((e)=>{
-        e.preventDefault();
-
-        var name = document.getElementsByName('uname')[0].value;
-
-        //将用户名和密码发给服务器，验证用户名是否被占用
-        $.get('http://localhost/mongoProject/server/routes/validName.php?uname='+name)
-         .then((result)=>{
-            console.log(result);
-            if(result.ok == 0){
-                alert(result.msg)
-            }
-            else{
-                register();
-            }
+    <script>
+        $('#btnLogin').hide();
+        $('#btnLogin').click(() => {
+            location = "login.html"
         })
-    })
+        $('#myRegister').submit((e) => {
+            e.preventDefault();
 
-    function register(){
-        var result = $('#myRegister').serialize();
-        $.get("http://localhost/mongoProject/server/routes/register.php?"+result)
-                .then((data)=>{
-            console.log(data);
-            if(data.ok == 1){
-                // 直接修改location
-                location="login.html"
-            }
-            else
-            {
-                alert(data.msg);
-            }
+            var name = document.getElementsByName('uname')[0].value;
+
+            //将用户名和密码发给服务器，验证用户名是否被占用
+            $.get('http://localhost/mongoProject/server/routes/validName.php?uname=' + name)
+                .then((result) => {
+                    console.log(result);
+                    if (result.ok == 0) {
+                        alert(result.msg)
+                    }
+                    else {
+                        register();
+                    }
+                })
         })
-    }
-</script>
+
+        function register() {
+            var result = $('#myRegister').serialize();
+            $.get("http://localhost/mongoProject/server/routes/register.php?" + result)
+                .then((data) => {
+                    console.log(data);
+                    if (data.ok == 1) {
+                        // 直接修改location
+                        //location = "login.html"
+                        $('#btnRegister').hide();
+
+                        count = 5;
+                        $('#btnLogin').text(count + 's自动跳转到登录页');
+                        $('#btnLogin').show();
+                        myInterval = setInterval(() => {
+                            $('#btnLogin').text(count + 's自动跳转到登录页');
+                            count--;
+                            if (count < 0) {
+                                clearInterval(myInterval);
+                                location = "login.html"
+                            }
+
+                        }, 1000)
+                    }
+                    else {
+                        alert(data.msg);
+                    }
+                })
+        }
+    </script>
 
 </body>
+
 </html>
