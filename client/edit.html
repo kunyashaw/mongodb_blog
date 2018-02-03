@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <script src="js/jquery-3.2.0.js"></script>
-    <title></title>
-</head>
-<body>
+
     <h2>编辑文章</h2>
 
     <form id="myEdit" >
@@ -22,33 +15,5 @@
         <button>修改</button>
     </form>
 
-    <script>
-        var id = location.search.slice(1);
-        $.get('http://localhost/mongoProject/server/routes/viewArticle.php?id='+id)
-                .then((data)=>{
-            if(data.ok == 1){
-                var result = data.result;
-                $('#myTitle')[0].value = result.title;
-                $('#content').text(result.content);
-            }
-        })
 
-        $('#myEdit').submit((event)=>{
-            event.preventDefault();
-            var result = $('#myEdit').serialize();
-            result = result+'&id='+id;
-            $.get('http://localhost/mongoProject/server/routes/editArticle.php?'+result)
-            .then((result)=>{
-                    console.log(result);
-                    if(result.ok == 1){
-                        alert('修改成功');
-                    }
-                    else{
-                        alert('修改失败:'+result.msg);
-                    }
-            })
-        })
-    </script>
 
-</body>
-</html>

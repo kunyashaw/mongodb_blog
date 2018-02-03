@@ -1,4 +1,4 @@
-<form id="myForm">
+<form id="myAddForm">
     <label for="title">标题</label>
     <br/>
     <input type="text" id="title" name="title" required/>
@@ -9,23 +9,3 @@
     <br/>
     <button>提交</button>
 </form>
-
-<script>
-    $('#myForm').submit((e) => {
-        e.preventDefault();
-        var result = $('#myForm').serialize();
-        $.get('http://localhost/mongoProject/server/routes/addArticle.php?' + result)
-            .then((result) => {
-                console.log(result);
-                if (result.ok == 1) {
-                    if (confirm('创建成功')) {
-                        location = "index.html"
-                    }
-                }
-                else {
-                    alert(result.msg)
-                }
-            })
-    })
-
-</script>

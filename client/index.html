@@ -3,7 +3,6 @@
 
 <head lang="en">
     <meta charset="UTF-8">
-
     <title></title>
 </head>
 
@@ -12,21 +11,15 @@
     <div id="myHeader">
     </div>
 
-    <div id="section">
+    <div id="myContent">
 
     </div>
 
     <script src="js/jquery-3.2.0.js"></script>
-    <script src="js/base.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/init.js"></script>
     <script>
-        $('#section').load('listArticles.html', function () {
-            $('#add').click(() => {
-                //location = "addArticle.html"
-                $('#section').load("addArticle.html");
-            })
-        });
-
-        showArticles();
+      showArticles();
     </script>
 
 </body>
