@@ -18,7 +18,10 @@
                 "date"=>time()*1000,
                 "author"=>$user["uname"]
             ]);
-            echo json_encode(["ok"=>1]);
+            $result = $db->articles->find()->sort(["date"=>-1]);
+            $article = $result->getNext();
+            $id = $article['_id']->{'$id'};
+            echo json_encode(["ok"=>1,"id"=>$id]);
          }
          else{
             echo json_encode(["ok"=>0,"msg"=>"请同时指定标题和正文"]);
